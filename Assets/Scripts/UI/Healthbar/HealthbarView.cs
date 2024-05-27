@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.EventBus;
-using Utils.EventBus.Signals;
-using Utils.ServiceLocator;
 
 namespace UI.Healthbar
 {
@@ -12,9 +9,9 @@ namespace UI.Healthbar
     {
         [SerializeField] private Slider _healtbarSlider;
         [SerializeField] private TMP_Text _healthbarText;
+        [SerializeField] private PlayerView _playerView;
         
         private HealthbarPresenter _presenter;
-        private EventBus _eventBus;
 
         private void Awake()
         {
@@ -23,18 +20,18 @@ namespace UI.Healthbar
 
         private void OnEnable()
         {
-            _eventBus = ServiceLocator.Instance.Get<EventBus>();
-            _eventBus.Subscribe<PlayerHealthChangedSignal>(ChangeHealthbarValue);
+            _playerView.HealthChanged += ChangeHealthbarValue;
         }
+        
 
-        private void ChangeHealthbarValue(PlayerHealthChangedSignal signal)
+        private void ChangeHealthbarValue(float value)
         {
-            _presenter.ChangeHealthbarValue(signal, _healtbarSlider, _healthbarText);
+            _presenter.ChangeHealthbarValue(value, _healtbarSlider, _healthbarText);
         }
 
         private void OnDisable()
         {
-            _eventBus.Unsubscribe<PlayerHealthChangedSignal>(ChangeHealthbarValue);
+            _playerView.HealthChanged -= ChangeHealthbarValue;
         }
     }
 }

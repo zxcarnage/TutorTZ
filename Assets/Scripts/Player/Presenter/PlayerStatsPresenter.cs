@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections;
-using Cysharp.Threading.Tasks;
-using Interfaces;
 using Player.Model;
-using Unity.VisualScripting;
-using UnityEngine;
-using Utils.EventBus.Signals;
-using Utils.ServiceLocator;
 using Visitor;
-using EventBus = Utils.EventBus.EventBus;
+using Zone;
 
 namespace Player.Presenter
 {
     public class PlayerStatsPresenter : IDisposable
     {
-        private PlayerStatsModel _model;
+        private readonly PlayerStatsModel _model;
+
+        public event Action<float> PlayerHealthChanged;
 
         public PlayerStatsPresenter()
         {
             _model = new PlayerStatsModel(100f);
-            ServiceLocator.Instance.Get<EventBus>().Subscribe<PlayerEnteredFireZoneSignal>(DecreasePlayerHealth);
         }
 
-        private void DecreasePlayerHealth(PlayerEnteredFireZoneSignal signal)
+        public void DecreasePlayerHealth(float damage)
         {
-            var targetHealth = _model.Health - signal.Damage;
+            var targetHealth = _model.Health - damage;
             HealthChanged(targetHealth);
             _model.SetHealth(targetHealth <= 0 ? 0 : targetHealth);
         }
@@ -43,12 +37,12 @@ namespace Player.Presenter
 
         private void HealthChanged(float value)
         {
-            ServiceLocator.Instance.Get<EventBus>().Invoke(new PlayerHealthChangedSignal(value));
+            PlayerHealthChanged?.Invoke(value);
         }
 
         public void Dispose()
         {
-            ServiceLocator.Instance.Get<EventBus>().Unsubscribe<PlayerEnteredFireZoneSignal>(DecreasePlayerHealth);
+            
         }
     }
 }
