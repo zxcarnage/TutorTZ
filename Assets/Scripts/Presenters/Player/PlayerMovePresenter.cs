@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Utils;
 
 namespace Presenters.Player
 {
@@ -8,6 +10,10 @@ namespace Presenters.Player
         private readonly Rigidbody2D _rigidbody2D;
         public PlayerMovePresenter(Rigidbody2D rigidbody2D, float movementSpeed)
         {
+            InvariantChecker.CheckObjectInvariant(rigidbody2D);
+            if (movementSpeed <= 0)
+                throw new ArgumentOutOfRangeException();
+            
             _movementSpeed = movementSpeed;
             _rigidbody2D = rigidbody2D;
         }

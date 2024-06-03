@@ -2,6 +2,7 @@
 using Presenters.Healthbar;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace Views.Healthbar
 {
@@ -11,11 +12,13 @@ namespace Views.Healthbar
 
         private HealthbarPresenter _presenter;
 
-        public void Initialize(HealthbarPresenter presenter)
+        public void Initialize(HealthModel healthModel)
         {
-            _healtbarSlider.maxValue = HealthModel.MaxHealth;
-            _healtbarSlider.value = HealthModel.MaxHealth;
-            _presenter = presenter;
+            InvariantChecker.CheckObjectInvariant(healthModel);
+            _presenter = new HealthbarPresenter(healthModel, this);
+            
+            _healtbarSlider.maxValue = healthModel.MaxHealth;
+            _healtbarSlider.value = healthModel.MaxHealth;
         }
 
         public void Enable()

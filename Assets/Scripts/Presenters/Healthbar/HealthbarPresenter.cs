@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Models.Player;
+﻿using Models.Player;
+using Utils;
 using Views.Healthbar;
 
 namespace Presenters.Healthbar
@@ -8,13 +8,16 @@ namespace Presenters.Healthbar
     public class HealthbarPresenter
     {
         private readonly HealthModel _healthModel;
-        private readonly List<HealthbarView> _views;
+        private readonly HealthbarView _view;
         
-        public HealthbarPresenter(HealthModel model, List<HealthbarView> views)
+        public HealthbarPresenter(HealthModel model, HealthbarView view)
         {
+            InvariantChecker.CheckObjectInvariant(model, view);
+            
             _healthModel = model;
-            _views = views;
+            _view = view;
         }
+        
 
         public void Enable()
         {
@@ -28,10 +31,7 @@ namespace Presenters.Healthbar
 
         private void ChangeHealthbarValue(float value)
         {
-            foreach (var view in _views)
-            {
-                view.ChangeVisual(value);
-            }
+            _view.ChangeVisual(value);
         }
         
     }

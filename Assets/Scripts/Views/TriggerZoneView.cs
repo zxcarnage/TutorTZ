@@ -1,6 +1,7 @@
 ﻿using Presenters.TriggerZone;
 using UnityEngine;
-using Views.Player;
+using Utils;
+using Views.Damageable;
 
 namespace Views
 {
@@ -9,23 +10,23 @@ namespace Views
         private TriggerZonePresenter _presenter;
         public void Initialize(TriggerZonePresenter presenter)
         {
+            InvariantChecker.CheckObjectInvariant(presenter);
             _presenter = presenter;
-            //Спросить про то, как сделать кастомную корутину)
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.TryGetComponent(out PlayerMoveView player))
+            if (other.TryGetComponent(out DamageableView damageable))
             {
-                _presenter.Enable();
+                _presenter.TryStartDamage(damageable);
             }
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.TryGetComponent(out PlayerMoveView player))
+            if (other.TryGetComponent(out DamageableView damageable))
             {
-                _presenter.Disable();
+                _presenter.TryStopDamage(damageable);
             }
         }
     }

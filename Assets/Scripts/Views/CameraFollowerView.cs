@@ -19,7 +19,7 @@ namespace Views
 
         private void LateUpdate()
         {
-            _presenter.FollowCamera(_targetTransform, _cameraTransform);
+            _presenter.FollowCamera();
         }
     }
 }

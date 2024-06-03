@@ -3,27 +3,35 @@ using Models.Player;
 using ScriptableObject;
 using UnityEngine;
 using Utils;
-using Views;
 
 namespace Presenters.Player
 {
     public class PlayerRegenPresenter
     {
-        private HealthModel _healthModel;
-        private RegenConfig _regenConfig;
-        private Coroutine _coroutine;
+        private readonly HealthModel _healthModel;
+        private readonly RegenConfig _regenConfig;
+        private readonly CoroutineService _coroutineService;
+        private readonly WaitForSeconds _waitForDelay;
+        
+        private float _timer;
 
-        private float _timer = 0f;
-
-        public PlayerRegenPresenter(RegenConfig regenConfig, HealthModel healthModel)
+        public PlayerRegenPresenter(CoroutineService coroutineService, RegenConfig regenConfig, HealthModel healthModel)
         {
+            InvariantChecker.CheckObjectInvariant(coroutineService,regenConfig,healthModel);
+            
             _healthModel = healthModel;
             _regenConfig = regenConfig;
+            _coroutineService = coroutineService;
+
+            _waitForDelay = new WaitForSeconds(_regenConfig.RegenDelay);
         }
+
+        public bool Enabled { get; private set; }
 
         public void Enable()
         {
-            _coroutine ??= Coroutines.StartRoutine(RegenRoutine());
+            Enabled = true;
+            _coroutineService.StartRoutine(RegenRoutine());
         }
 
         private IEnumerator RegenRoutine()
@@ -31,12 +39,12 @@ namespace Presenters.Player
             while (_timer <= _regenConfig.RegenDuration)
             {
                 _healthModel.Increase(_regenConfig.RegenValue);
-                yield return new WaitForSeconds(_regenConfig.RegenDelay);
+                yield return _waitForDelay;
                 _timer += _regenConfig.RegenDelay;
             }
 
             _timer = 0f;
-            _coroutine = null;
+            Enabled = false;
         }
     }
 }
