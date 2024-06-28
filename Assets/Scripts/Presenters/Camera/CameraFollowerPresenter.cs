@@ -1,6 +1,9 @@
 ﻿using System;
+using ScriptableObject;
 using UnityEngine;
 using Utils;
+using Views.Entity;
+using Views.Player;
 
 namespace Presenters.Camera
 {
@@ -9,13 +12,14 @@ namespace Presenters.Camera
         private readonly Transform _playerTransform;
         private readonly Transform _cameraTransform;
         private readonly float _cameraSmooth;
-        public CameraFollowerPresenter(Transform playerTransform, Transform cameraTransform,float cameraSmooth)
+        
+        public CameraFollowerPresenter(PlayerMoveView player, Transform cameraTransform, CameraConfig cameraConfig)
         {
-            InvariantChecker.CheckObjectInvariant(playerTransform, cameraTransform);
-            if (cameraSmooth <= 0 || cameraSmooth > 1)
+            InvariantChecker.CheckObjectInvariant(player, cameraTransform);
+            _cameraSmooth = cameraConfig.Smooth;
+            if (_cameraSmooth <= 0 || _cameraSmooth > 1)
                 throw new ArgumentOutOfRangeException();
-            _cameraSmooth = cameraSmooth;
-            _playerTransform = playerTransform;
+            _playerTransform = player.transform;
             _cameraTransform = cameraTransform;
         }
 

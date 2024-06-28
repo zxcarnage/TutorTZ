@@ -1,20 +1,21 @@
 ﻿using Presenters.Camera;
+using ScriptableObject;
 using UnityEngine;
+using Views.Entity;
+using Views.Player;
+using Zenject;
 
 namespace Views
 {
     [RequireComponent(typeof(Transform))]
     public class CameraFollowerView : MonoBehaviour
     {
-        private Transform _targetTransform;
         private CameraFollowerPresenter _presenter;
-        private Transform _cameraTransform;
 
-        public void Initialize(CameraFollowerPresenter presenter, Transform targetTransform)
+        [Inject]
+        public void Initialize(PlayerMoveView player, CameraConfig cameraConfig)
         {
-            _presenter = presenter;
-            _targetTransform = targetTransform;
-            _cameraTransform = transform;
+            _presenter = new CameraFollowerPresenter(player, transform, cameraConfig);
         }
 
         private void LateUpdate()

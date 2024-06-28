@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ScriptableObject;
 using UnityEngine;
 using Utils;
 using Views.Damageable;
@@ -17,14 +18,15 @@ namespace Presenters.TriggerZone
         private readonly Dictionary<DamageableView, Coroutine> _damageableCoroutines;
 
 
-        public TriggerZonePresenter(CoroutineService coroutineService,  float damage, float damageDelay)
+        public TriggerZonePresenter(CoroutineService coroutineService,  TriggerZoneConfig config)
         {
-            InvariantChecker.CheckObjectInvariant(coroutineService);
-            if (damage < 0 || damageDelay <= 0)
+            InvariantChecker.CheckObjectInvariant(coroutineService, config);
+            _damage = config.Damage;
+            _damageDelay = config.DamageDelay;
+            
+            if (_damage < 0 || _damageDelay <= 0)
                 throw new ArgumentOutOfRangeException();
             
-            _damage = damage;
-            _damageDelay = damageDelay;
             _coroutineService = coroutineService;
             
             _waitForDelayEnumerator = new WaitForSeconds(_damageDelay);

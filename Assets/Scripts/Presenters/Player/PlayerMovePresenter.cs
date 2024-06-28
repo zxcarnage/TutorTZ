@@ -1,4 +1,5 @@
 using System;
+using ScriptableObject;
 using UnityEngine;
 using Utils;
 
@@ -8,14 +9,14 @@ namespace Presenters.Player
     {
         private readonly float _movementSpeed;
         private readonly Rigidbody2D _rigidbody2D;
-        public PlayerMovePresenter(Rigidbody2D rigidbody2D, float movementSpeed)
+        public PlayerMovePresenter(PlayerConfig config, Rigidbody2D playerRigidbody)
         {
-            InvariantChecker.CheckObjectInvariant(rigidbody2D);
-            if (movementSpeed <= 0)
+            InvariantChecker.CheckObjectInvariant(config);
+            if (config.Speed <= 0)
                 throw new ArgumentOutOfRangeException();
             
-            _movementSpeed = movementSpeed;
-            _rigidbody2D = rigidbody2D;
+            _movementSpeed = config.Speed;
+            _rigidbody2D = playerRigidbody;
         }
 
         public void MovePlayer(Vector2 moveDirection)
