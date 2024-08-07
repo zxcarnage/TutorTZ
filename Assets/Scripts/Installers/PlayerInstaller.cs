@@ -27,13 +27,6 @@ namespace Installers
                 .NonLazy();
         }
 
-        private void BindPlayerHealthModel()
-        {
-            var x = Container.Bind<IHealthModel>()
-                .To<PlayerHealthModel>()
-                .FromSubContainerResolve();
-        }
-
         private void InstantiatePlayer()
         {
             _player = Container.InstantiatePrefabForComponent<PlayerMoveView>

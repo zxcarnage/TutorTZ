@@ -11,6 +11,7 @@ namespace Installers
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private TriggerZoneConfig _triggerZoneConfig;
         [SerializeField] private CameraConfig _cameraConfig;
+        [SerializeField] private SpawnerConfig _spawnerConfig;
         
         public override void InstallBindings()
         {
@@ -18,6 +19,15 @@ namespace Installers
             BindPlayerConfig();
             BindTriggerZoneConfig();
             BindCameraConfig();
+            BindSpawnerConfig();
+        }
+
+        private void BindSpawnerConfig()
+        {
+            Container.Bind<SpawnerConfig>()
+                .FromScriptableObject(_spawnerConfig)
+                .AsSingle()
+                .NonLazy();
         }
 
         private void BindCameraConfig()
