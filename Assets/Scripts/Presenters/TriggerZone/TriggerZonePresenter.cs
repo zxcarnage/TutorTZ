@@ -1,69 +1,73 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using ScriptableObjects;
 using UnityEngine;
 using Utils;
 using Views.Damageable;
 
 namespace Presenters.TriggerZone
 {
-
     public class TriggerZonePresenter
     {
-        private readonly float _damage;
-        private readonly float _damageDelay;
-        private readonly CoroutineService _coroutineService;
-        private readonly WaitForSeconds _waitForDelayEnumerator;
-        private readonly Dictionary<DamageableView, Coroutine> _damageableCoroutines;
-
-
-        public TriggerZonePresenter(CoroutineService coroutineService,  float damage, float damageDelay)
+        private readonly TriggerZoneConfig _config;
+        private readonly Dictionary<DamageableView, KeyValuePair<CancellationTokenSource, UniTaskVoid>> _damageableTasks;
+        private readonly int _secondsDelay;
+        
+        public TriggerZonePresenter(TriggerZoneConfig config)
         {
-            InvariantChecker.CheckObjectInvariant(coroutineService);
-            if (damage < 0 || damageDelay <= 0)
+            InvariantChecker.CheckObjectInvariant(config);
+            if (config.Damage < 0 || config.DamageDelay <= 0)
                 throw new ArgumentOutOfRangeException();
             
-            _damage = damage;
-            _damageDelay = damageDelay;
-            _coroutineService = coroutineService;
-            
-            _waitForDelayEnumerator = new WaitForSeconds(_damageDelay);
-            _damageableCoroutines = new Dictionary<DamageableView, Coroutine>();
+            _damageableTasks = new ();
+            _secondsDelay = (int) (_config.DamageDelay * 1000);
         }
 
         public void TryStartDamage(DamageableView damageableView)
         {
-            if (!_damageableCoroutines.ContainsKey(damageableView))
-                StartDamage(damageableView);
-            else
-                Debug.LogWarning("Coroutine already exists!");
+            if (_damageableTasks.ContainsKey(damageableView) == true)
+                throw new ArgumentOutOfRangeException();
+            StartDamage(damageableView);
         }
 
         public void TryStopDamage(DamageableView damageableView)
         {
-            if (_damageableCoroutines.ContainsKey(damageableView))
-                StopDamage(damageableView);
-            else
-                Debug.LogWarning("Trying to stop nonexistent coroutine");
+            if (_damageableTasks.ContainsKey(damageableView) == false)
+                throw new ArgumentOutOfRangeException();
+            StopDamage(damageableView);
         }
         
         private void StartDamage(DamageableView damageableView)
         {
-            _damageableCoroutines.Add(damageableView, _coroutineService.StartRoutine(DealDamageRoutine(damageableView)));
+            var cts = new CancellationTokenSource();
+            _damageableTasks.Add(damageableView, new(cts, DealDamageTask(damageableView, cts.Token)));
+
         }
 
         private void StopDamage(DamageableView damageableView)
         {
-            _coroutineService.StopRoutine(_damageableCoroutines[damageableView]);
-            _damageableCoroutines.Remove(damageableView);
+            _damageableTasks[damageableView].Key.Cancel();
+            _damageableTasks.Remove(damageableView);
         }
         
-        private IEnumerator DealDamageRoutine(DamageableView damageableView)
+        private async UniTaskVoid DealDamageTask(DamageableView damageableView, CancellationToken token)
         {
-            while (true)
+            try
             {
-                damageableView.DealDamage(_damage);
-                yield return _waitForDelayEnumerator;
+                while (true)
+                {
+                    await UniTask.Delay(_secondsDelay, cancellationToken: token);
+                    token.ThrowIfCancellationRequested();
+                    damageableView.DealDamage(_config.Damage);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.Log("Deal damage task cancelled");
             }
         }
     }

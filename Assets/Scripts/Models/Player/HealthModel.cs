@@ -1,4 +1,5 @@
 ﻿using System;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Models.Player
@@ -8,13 +9,13 @@ namespace Models.Player
         private const string InvalidValueException = "Invalid health change value";
         private float _health;
 
-        public HealthModel(float maxHealth)
+        public HealthModel(PlayerConfig playerConfig)
         {
-            if (maxHealth <= 0)
+            if (playerConfig.MaxHealth <= 0)
                 throw new ArgumentOutOfRangeException();
             
-            _health = maxHealth;
-            MaxHealth = maxHealth;
+            MaxHealth = playerConfig.MaxHealth;
+            _health = MaxHealth;
         }
 
         public float MaxHealth { get;}

@@ -1,6 +1,7 @@
 ﻿using Presenters.Player;
+using ScriptableObjects;
 using UnityEngine;
-using Utils;
+using Zenject;
 
 namespace Views.Player
 {
@@ -11,10 +12,10 @@ namespace Views.Player
         private const string Horizontal = nameof(Horizontal);
         private const string Vertical = nameof(Vertical);
 
-        public void Initialize(PlayerMovePresenter presenter)
+        [Inject]
+        public void Initialize(Rigidbody2D playerRigidbody, PlayerConfig playerConfig)
         {
-            InvariantChecker.CheckObjectInvariant(presenter);
-            _presenter = presenter;
+            _presenter = new PlayerMovePresenter(playerRigidbody,playerConfig);
         }
 
         private void FixedUpdate()

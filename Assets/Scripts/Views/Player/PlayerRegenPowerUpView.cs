@@ -1,6 +1,8 @@
-﻿using Presenters.Player;
+﻿using Models.Player;
+using Presenters.Player;
+using ScriptableObjects;
 using UnityEngine;
-using Utils;
+using Zenject;
 
 namespace Views.Player
 {
@@ -8,16 +10,16 @@ namespace Views.Player
     {
         private PlayerRegenPresenter _presenter;
         
-        public void Initialize(PlayerRegenPresenter presenter)
+        [Inject]
+        public void Initialize(RegenConfig regenConfig, HealthModel healthModel)
         {
-            InvariantChecker.CheckObjectInvariant(presenter);
-            _presenter = presenter;
+            _presenter = new PlayerRegenPresenter(regenConfig, healthModel);
         }
 
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Space) && _presenter.Enabled == false)
-                _presenter.Enable();
+                _presenter.Regenerate();
         }
 
     }
