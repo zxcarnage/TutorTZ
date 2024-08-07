@@ -8,7 +8,7 @@ namespace ScriptableObjects
         [SerializeField] private float _damage;
         [SerializeField] private float _damageDelay;
 
-        public float Damage =>-_damage;
+        public float Damage => _damage;
         public float DamageDelay => _damageDelay;
     }
 

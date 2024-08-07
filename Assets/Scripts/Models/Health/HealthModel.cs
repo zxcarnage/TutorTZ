@@ -2,9 +2,10 @@
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Models.Player
+namespace Models.Health
 {
-    public class HealthModel
+
+    public abstract class HealthModel : IHealthModel
     {
         private const string InvalidValueException = "Invalid health change value";
         private float _health;
@@ -18,7 +19,8 @@ namespace Models.Player
             _health = MaxHealth;
         }
 
-        public float MaxHealth { get;}
+        public float MaxHealth { get; private set; }
+        
         public event Action<float> Changed;
 
         public void Decrease(float value)
@@ -28,7 +30,7 @@ namespace Models.Player
                     
             _health -= value;
             ClampHealth();
-            
+            Debug.Log(_health);
             Changed?.Invoke(_health);
         }
 
@@ -48,4 +50,5 @@ namespace Models.Player
             _health = Mathf.Clamp(_health, 0, MaxHealth);
         }
     }
+
 }

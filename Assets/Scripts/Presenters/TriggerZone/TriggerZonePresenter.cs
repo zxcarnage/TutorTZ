@@ -22,7 +22,8 @@ namespace Presenters.TriggerZone
             InvariantChecker.CheckObjectInvariant(config);
             if (config.Damage < 0 || config.DamageDelay <= 0)
                 throw new ArgumentOutOfRangeException();
-            
+
+            _config = config;
             _damageableTasks = new ();
             _secondsDelay = (int) (_config.DamageDelay * 1000);
         }

@@ -1,20 +1,20 @@
 ﻿using Presenters.Camera;
+using ScriptableObjects;
 using UnityEngine;
+using Views.Player;
+using Zenject;
 
-namespace Views
+namespace Views.Camera
 {
     [RequireComponent(typeof(Transform))]
     public class CameraFollowerView : MonoBehaviour
     {
-        private Transform _targetTransform;
         private CameraFollowerPresenter _presenter;
-        private Transform _cameraTransform;
 
-        public void Initialize(CameraFollowerPresenter presenter, Transform targetTransform)
+        [Inject]
+        public void Initialize(PlayerMoveView player, CameraConfig cameraConfig)
         {
-            _presenter = presenter;
-            _targetTransform = targetTransform;
-            _cameraTransform = transform;
+            _presenter = new CameraFollowerPresenter(player.gameObject.transform, transform, cameraConfig.CameraSmooth);
         }
 
         private void LateUpdate()

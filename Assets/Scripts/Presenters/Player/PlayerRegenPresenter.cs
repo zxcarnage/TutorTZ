@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
-using Models.Player;
+using Models;
+using Models.Health;
 using ScriptableObjects;
 using Utils;
 
@@ -8,13 +9,13 @@ namespace Presenters.Player
     public class PlayerRegenPresenter
     {
         private readonly RegenConfig _regenConfig;
-        private readonly HealthModel _healthModel;
+        private readonly IHealthModel _healthModel;
+        private readonly int _targetDelay;
         
         
         private float _timer;
-        private int _targetDelay;
 
-        public PlayerRegenPresenter(RegenConfig regenConfig, HealthModel healthModel)
+        public PlayerRegenPresenter(RegenConfig regenConfig, IHealthModel healthModel)
         {
             InvariantChecker.CheckObjectInvariant(regenConfig, healthModel);
             

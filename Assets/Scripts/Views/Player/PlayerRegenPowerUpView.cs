@@ -1,4 +1,5 @@
-﻿using Models.Player;
+﻿using Models;
+using Models.Health;
 using Presenters.Player;
 using ScriptableObjects;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Views.Player
         private PlayerRegenPresenter _presenter;
         
         [Inject]
-        public void Initialize(RegenConfig regenConfig, HealthModel healthModel)
+        public void Initialize(RegenConfig regenConfig, IHealthModel healthModel)
         {
             _presenter = new PlayerRegenPresenter(regenConfig, healthModel);
         }

@@ -1,4 +1,5 @@
-﻿using Models.Player;
+﻿using Models;
+using Models.Health;
 using Presenters.Healthbar;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,14 +8,13 @@ using Zenject;
 
 namespace Views.Healthbar
 {
-    public class HealthbarView : MonoBehaviour
+    public abstract class HealthbarView : MonoBehaviour
     {
         [SerializeField] private Slider _healtbarSlider;
 
         private HealthbarPresenter _presenter;
-
-        [Inject]
-        public void Initialize(HealthModel healthModel)
+        
+        public virtual void Initialize(IHealthModel healthModel)
         {
             InvariantChecker.CheckObjectInvariant(healthModel);
             _presenter = new HealthbarPresenter(healthModel, this);

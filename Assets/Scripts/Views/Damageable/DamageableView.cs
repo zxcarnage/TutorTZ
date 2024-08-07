@@ -1,5 +1,6 @@
 ﻿using System;
-using Models.Player;
+using Models;
+using Models.Health;
 using Presenters.Damageable;
 using UnityEngine;
 using Zenject;
@@ -11,7 +12,7 @@ namespace Views.Damageable
         private DamageablePresenter _presenter;
 
         [Inject]
-        public void Initialize(HealthModel healthModel)
+        public void Initialize(IHealthModel healthModel)
         {
             _presenter = new DamageablePresenter(healthModel);
         }

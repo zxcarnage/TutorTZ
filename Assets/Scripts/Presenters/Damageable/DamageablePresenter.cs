@@ -1,4 +1,5 @@
-﻿using Models.Player;
+﻿using Models;
+using Models.Health;
 using Utils;
 
 
@@ -6,9 +7,9 @@ namespace Presenters.Damageable
 {
     public class DamageablePresenter
     {
-        private HealthModel _healthModel;
+        private IHealthModel _healthModel;
         
-        public DamageablePresenter(HealthModel healthModel)
+        public DamageablePresenter(IHealthModel healthModel)
         {
             InvariantChecker.CheckObjectInvariant(healthModel);
             _healthModel = healthModel;

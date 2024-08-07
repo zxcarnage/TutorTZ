@@ -1,6 +1,6 @@
-using Models.Player;
+using Models;
+using Models.Health;
 using UnityEngine;
-using Views.Player;
 using Zenject;
 
 namespace Installers.GameObjectInstallers
@@ -12,14 +12,6 @@ namespace Installers.GameObjectInstallers
         public override void InstallBindings()
         {
             BindPlayerRigidbody();
-            BindHealthModel();
-        }
-
-        private void BindHealthModel()
-        {
-            Container.Bind<HealthModel>()
-                .AsSingle()
-                .NonLazy();
         }
 
         private void BindPlayerRigidbody()

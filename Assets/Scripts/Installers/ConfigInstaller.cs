@@ -10,12 +10,22 @@ namespace Installers
         [SerializeField] private RegenConfig _regenConfig;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private TriggerZoneConfig _triggerZoneConfig;
+        [SerializeField] private CameraConfig _cameraConfig;
         
         public override void InstallBindings()
         {
             BindRegenConfig();
             BindPlayerConfig();
             BindTriggerZoneConfig();
+            BindCameraConfig();
+        }
+
+        private void BindCameraConfig()
+        {
+            Container.Bind<CameraConfig>()
+                .FromScriptableObject(_cameraConfig)
+                .AsSingle()
+                .NonLazy();
         }
 
         private void BindTriggerZoneConfig()
