@@ -32,6 +32,16 @@ namespace Views.StateMachine
             _presenter.FixedUpdate();
         }
 
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            _presenter.OnTriggerEnter2D(col);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            _presenter.OnTriggerExit2D(other);
+        }
+
         public void SetState(Type stateType)
         {
             _presenter.SetState(stateType);

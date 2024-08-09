@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Utils;
 using Views.StateMachine;
 
@@ -43,6 +44,16 @@ namespace Presenters.StateMachine
         public void FixedUpdate()
         {
             _activeState.FixedUpdate();
+        }
+
+        public void OnTriggerEnter2D(Collider2D col)
+        {
+            _activeState.OnTriggerEnter2D(col);
+        }
+
+        public void OnTriggerExit2D(Collider2D other)
+        {
+            _activeState.OnTriggerExit2D(other);
         }
     }
 

@@ -14,9 +14,9 @@ namespace Installers
 
         public override void InstallBindings()
         {
-            BindPlayerMoveView();
             BindHealthModel();
             InstantiatePlayer();
+            BindPlayerMoveView();
         }
         
         private void BindHealthModel()

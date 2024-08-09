@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using Models;
 using ScriptableObjects;
+using UnityEngine;
 using Utils;
 using Views.StateMachine;
 using Zenject;
@@ -51,6 +52,16 @@ namespace Presenters.Enemy.State
         {
             if(_attacked == true)
                 stateMachineView.SetState(typeof(MoveStatePresenter));
+        }
+
+        public void OnTriggerEnter2D(Collider2D col)
+        {
+            
+        }
+
+        public void OnTriggerExit2D(Collider2D col)
+        {
+            
         }
 
         public void Exit()

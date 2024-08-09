@@ -1,7 +1,6 @@
 ﻿using ScriptableObjects;
 using UnityEngine;
 using Utils;
-using Views.Enemy.EnemyStateMachine;
 using Views.Player;
 using Views.StateMachine;
 
@@ -14,6 +13,7 @@ namespace Presenters.Enemy.State
         private readonly Rigidbody2D _enemyRigidbody;
 
         private Vector2 _movementVector;
+        private bool _shouldAttack = false;
         
         public MoveStatePresenter(EnemyConfig enemyConfig, PlayerMoveView target, Rigidbody2D enemyRigidbody2D)
         {
@@ -35,16 +35,29 @@ namespace Presenters.Enemy.State
 
         public void FixedUpdate()
         {
-            _movementVector = ((Vector2) _target.position - _enemyRigidbody.position) 
+            _movementVector = ((Vector2) _target.position - _enemyRigidbody.position).normalized 
                               * _enemyConfig.MovementSpeed * Time.fixedDeltaTime;
             _enemyRigidbody.velocity = _movementVector;
         }
 
         public void ChangeState(StateMachineView stateMachineView)
         {
-            if(Vector2.Distance(_enemyRigidbody.position, _target.position) <= _enemyConfig.AttackDistance)
+            if(_shouldAttack == true)
                 stateMachineView.SetState(typeof(AttackStatePresenter));
         }
+
+        public void OnTriggerEnter2D(Collider2D col)
+        {
+            if (col.TryGetComponent(out PlayerMoveView playerMoveView))
+                _shouldAttack = true;
+        }
+
+        public void OnTriggerExit2D(Collider2D col)
+        {
+            if (col.TryGetComponent(out PlayerMoveView playerMoveView))
+                _shouldAttack = false;
+        }
+
 
         public void Exit()
         {

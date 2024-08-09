@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfaa4cdce4bf4eeb9f974b7cdbf087f4, type: 3}
   m_Name: Slime
   m_EditorClassIdentifier: 
-  _movementSpeed: 10
+  _movementSpeed: 100
   _damage: 3
-  _attackDistance: 0.1
-  _attackDelay: 1
+  _attackDistance: 0.82
+  _attackDelay: 0.1
