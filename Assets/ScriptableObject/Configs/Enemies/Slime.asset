@@ -15,4 +15,4 @@ MonoBehaviour:
   _movementSpeed: 100
   _damage: 3
   _attackDistance: 0.82
-  _attackDelay: 0.1
+  _attackDelay: 1

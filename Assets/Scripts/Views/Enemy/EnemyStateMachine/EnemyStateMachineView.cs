@@ -1,16 +1,31 @@
-﻿using System.Collections.Generic;
-using Views.StateMachine;
+﻿using Presenters.StateMachine;
+using UnityEngine;
+using Views.Enemy.EnemyStateMachine.State;
 using Zenject;
 
 namespace Views.Enemy.EnemyStateMachine
 {
 
-    public class EnemyStateMachineView : StateMachineView
+    public class EnemyStateMachineView : MonoBehaviour
     {
+        [SerializeField] private StateView _startingState;
+
+        private EnemyStateMachinePresenter _presenter;
+
         [Inject]
-        public override void Initialize(List<IState> states, StateMachineView stateMachineView)
+        public void Initialize()
         {
-            base.Initialize(states, stateMachineView);
+            _presenter = new EnemyStateMachinePresenter(_startingState);
+        }
+
+        void Start()
+        {
+            _presenter.Start();
+        }
+
+        private void Update()
+        {
+            _presenter.Update();
         }
     }
 

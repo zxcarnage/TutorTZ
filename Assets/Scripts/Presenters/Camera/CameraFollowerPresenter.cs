@@ -12,7 +12,7 @@ namespace Presenters.Camera
         public CameraFollowerPresenter(Transform playerTransform, Transform cameraTransform,float cameraSmooth)
         {
             InvariantChecker.CheckObjectInvariant(playerTransform, cameraTransform);
-            if (cameraSmooth <= 0 || cameraSmooth > 1)
+            if (cameraSmooth <= 0)
                 throw new ArgumentOutOfRangeException();
             _cameraSmooth = cameraSmooth;
             _playerTransform = playerTransform;

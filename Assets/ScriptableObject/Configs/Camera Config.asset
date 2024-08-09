@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa91d66f5ab24fbdbdbc045836f7f323, type: 3}
   m_Name: Camera Config
   m_EditorClassIdentifier: 
-  _cameraSmooth: 1
+  _cameraSmooth: 4

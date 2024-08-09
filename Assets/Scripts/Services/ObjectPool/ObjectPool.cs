@@ -14,7 +14,7 @@ namespace Services.ObjectPool
         private readonly IFactory _factory;
         private readonly Transform _parentTransform;
         
-        private const int SpawnAmount = 1;
+        private const int SpawnAmount = 30;
 
         public ObjectPool(IFactory factory, Transform parenTransform)
         {
